@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { client_id, state } from '../config';
+import { basic_auth, client_id, redirect_uri, state } from '../config';
 
 export function retrieveToken() {
   // http://127.0.0.1:3000/authorize_callback?state=wonder-reddit-app&code=FexgaqpKHMs-1w8eQ_8O_RXYjUg
@@ -19,34 +19,28 @@ export function retrieveToken() {
         console.log(codeOrError);
         return getAccessToken(codeOrError);
     } else {
-      console.log('AUTH ERROR')
+      // Auth error
+      console.log(codeOrError)
     }
   }
 }
-// grant_type=authorization_code&code=CODE&redirect_uri=URI
 
 function getAccessToken(code) {
-  // https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&redirect_uri=http://127.0.0.1:3000/authorize_callback&code=7lrQR9pjNFfkr5cdQSlMvv6A_Is
+  const access_token_uri = `https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}`;
 
-
-  let access_token_uri = `https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=${code}&redirect_uri=http://127.0.0.1:3000/authorize_callback`;
-  console.log('cors')
   return fetch(access_token_uri, {
     method: 'POST',
     headers: {
-      // 'Content-Type': 'application/json',
-      'Authorization': 'Basic NERaUlBxMFd1WGlEaGc6bk4xemxkYTl2d0o5RTgtUFlJelRxYTNNUkNZ'
-      // 'Access-Control-Allow-Headers': '*',
-      // 'Access-Control-Allow-Origin': 'localhost'
-      // 'Access-Control-Allow-Methods': '*'
+      'Authorization': basic_auth
     }
-  }).then(response => {
-    
-    return response.json();
-  }).then(function(data) {
-    // `data` is the parsed version of the JSON returned from the above endpoint.
-    console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+  }).then(response => response.json())
+    .then(function(data) {
+    console.log(data);
+    const { access_token, refresh_token } = data;
+    return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)
   });
 }
+
+// TODO: store tokens in local storage
