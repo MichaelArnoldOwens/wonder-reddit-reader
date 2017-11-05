@@ -5,4 +5,5 @@ const scope = encodeURIComponent('mysubreddits subscribe');
 
 export const state = encodeURIComponent('wonder-reddit-app');
 export const basic_auth = 'Basic NERaUlBxMFd1WGlEaGc6bk4xemxkYTl2d0o5RTgtUFlJelRxYTNNUkNZ';
-export default `https://www.reddit.com/api/v1/authorize?client_id=${client_id}&response_type=code&state=${state}&redirect_uri=${redirect_uri}&duration=permanent&scope=${scope}`;
+export const redditInitAuthUri = `https://www.reddit.com/api/v1/authorize?client_id=${client_id}&response_type=code&state=${state}&redirect_uri=${redirect_uri}&duration=permanent&scope=${scope}`;
+export const redditTokenUri = 'https://www.reddit.com/api/v1/access_token';

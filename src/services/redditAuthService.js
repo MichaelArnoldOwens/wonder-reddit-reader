@@ -1,9 +1,7 @@
 import 'whatwg-fetch';
-import { basic_auth, client_id, redirect_uri, state } from '../config';
+import { basic_auth, redirect_uri, redditTokenUri, state } from '../config';
 
-export function retrieveToken() {
-  // http://127.0.0.1:3000/authorize_callback?state=wonder-reddit-app&code=FexgaqpKHMs-1w8eQ_8O_RXYjUg
-
+export function getBearerCode() {
   let params = window.location.href.split('?');
 
   // Parse the query params
@@ -16,19 +14,18 @@ export function retrieveToken() {
 
     if(sameState && (codeOrError.indexOf('code') !== -1)) {
         codeOrError = codeOrError.substring(codeOrError.indexOf('=') + 1);
-        console.log(codeOrError);
         return getAccessToken(codeOrError);
     } else {
       // Auth error
-      console.log(codeOrError)
+      return codeOrError;
     }
   }
 }
 
 function getAccessToken(code) {
-  const access_token_uri = `https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}`;
+  const get_access_token_uri = `${redditTokenUri}?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}`;
 
-  return fetch(access_token_uri, {
+  return fetch(get_access_token_uri, {
     method: 'POST',
     headers: {
       'Authorization': basic_auth
@@ -36,10 +33,36 @@ function getAccessToken(code) {
   }).then(response => response.json())
     .then(function(data) {
     console.log(data);
-    const { access_token, refresh_token } = data;
+    const { access_token, refresh_token, error } = data;
+    if(error) {
+      return { error };
+    }
     return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)
+    return err;
+  });
+}
+
+// TODO: refactor getNewToken and getAccessToken
+export function getNewToken(refresh_token) {
+  const get_refresh_token_uri = `${redditTokenUri}grant_type=refresh_token&refresh_token=${refresh_token}`
+  fetch(get_refresh_token_uri, {
+    method: 'POST',
+    headers: {
+      'Authorization': basic_auth
+    }
+  }).then(response => response.json())
+    .then(function(data) {
+    console.log(data);
+    const { access_token, refresh_token, error } = data;
+    if(error) {
+      return { error };
+    }
+    return { access_token, refresh_token };
+  }).catch(err => {
+    console.log(err)
+    return err;
   });
 }
 
