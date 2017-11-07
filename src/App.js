@@ -21,6 +21,7 @@ class App extends Component {
           error: response.error
         });
       }
+      // todo make this a true/false flag instead of storing token here
       this.setState({
         access_token: response.access_token,
         refresh_token: response.refresh_token

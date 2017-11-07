@@ -38,6 +38,7 @@ function getAccessToken(code) {
       return { error };
     }
     localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
     return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)
@@ -46,7 +47,8 @@ function getAccessToken(code) {
 }
 
 // TODO: refactor getNewToken and getAccessToken
-export function getNewAccessToken(refresh_token) {
+export function getNewAccessToken(refresh_token, apiCall = null) {
+  console.log('getNewAccessToken() called')
   const get_refresh_token_uri = `${redditTokenUri}grant_type=refresh_token&refresh_token=${refresh_token}`
   fetch(get_refresh_token_uri, {
     method: 'POST',
@@ -61,6 +63,14 @@ export function getNewAccessToken(refresh_token) {
       return { error };
     }
     localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+    if(apiCall) {
+      console.log('calling api call')
+      return apiCall();
+    }
+    // TODO: clean this up; make it a flag instead of returning actual token (?)
+    console.log('getNewAccessToken')
+    console.log(access_token)
     return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)

@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Things to Note
   > If the user doesn’t configure any subreddits, show posts from https://www.reddit.com/r/news/ by default.
 
-I made the decision to show `/r/news` posts by default if the user's home page had no posts.
+I made the decision to show `/r/news` posts by default if the user's home page had no posts. Since an empty home screen does not provide any value to the user.
 
   >Write a server only if you think there is a functional reason for having one. Our feature requirements are front-end only. serve is a great way to serve static pages.
 
