@@ -7,9 +7,10 @@ export default class Feed extends Component {
 
     return posts ?
       posts.map(post => {
+        const { id, title } = post.data;
         return (
-          <div>
-            <h3>{post.data.title}</h3>
+          <div key={ id }>
+            <h3>{ title }</h3>
           </div>
         );
       }) 

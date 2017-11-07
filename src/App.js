@@ -32,7 +32,9 @@ class App extends Component {
   render() {
     const { access_token, error } = this.state;
     const isRedirect = window.location.href.split('?').length > 1;
-    if(!access_token && isRedirect && !error) {
+    const localToken = localStorage.getItem('access_token');
+    const doesTokenExist = access_token || localToken
+    if(!doesTokenExist && isRedirect && !error) {
       this.initAuthentication();
     }
 
@@ -43,7 +45,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to Wonder Reddit Reader</h1>
         </header>
         <div className="App-intro">
-          { access_token ? <Feed /> : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
+          { doesTokenExist ? <Feed /> : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
         </div>
       </div>
     );
