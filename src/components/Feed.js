@@ -27,7 +27,7 @@ export default class Feed extends Component {
           return getNewAccessToken(refresh_token, getMyHome);
         }
         this.setState({
-          posts: response.data.children
+          posts: response.children
         });
         return response;
       });

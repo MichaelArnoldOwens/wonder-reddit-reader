@@ -30,5 +30,5 @@ export function getSubreddit(sub) {
     }
   }).then(response => {
     return response.json();
-  });
+  }).then(response => response.data);
 }
