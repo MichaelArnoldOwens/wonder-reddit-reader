@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import icon from './icon.png';
 import './App.css';
 import { redditInitAuthUri } from './config';
-import { getBearerCode } from './services/redditAuthService';
+import { getAuthCode } from './services/redditAuthService';
+import Feed from './components/Feed';
 
 class App extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class App extends Component {
   }
 
   initAuthentication = () => {
-    getBearerCode().then(response => {
+    getAuthCode().then(response => {
       if(response.error) {
         this.setState({
           error: response.error
@@ -40,9 +41,9 @@ class App extends Component {
           <img src={icon} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to Wonder Reddit Reader</h1>
         </header>
-        <p className="App-intro">
-          { access_token ? null : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
-        </p>
+        <div className="App-intro">
+          { access_token ? <Feed /> : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
+        </div>
       </div>
     );
   }

@@ -1,9 +1,9 @@
 // export const client_id = encodeURIComponent('KZ8Nj91o7-KK0Q');
 export const client_id = encodeURIComponent('4DZRPq0WuXiDhg');
 export const redirect_uri = encodeURIComponent('http://127.0.0.1:3000/authorize_callback');
-const scope = encodeURIComponent('mysubreddits subscribe');
-
+const scope = encodeURIComponent('mysubreddits subscribe read identity');
 export const state = encodeURIComponent('wonder-reddit-app');
 export const basic_auth = 'Basic NERaUlBxMFd1WGlEaGc6bk4xemxkYTl2d0o5RTgtUFlJelRxYTNNUkNZ';
 export const redditInitAuthUri = `https://www.reddit.com/api/v1/authorize?client_id=${client_id}&response_type=code&state=${state}&redirect_uri=${redirect_uri}&duration=permanent&scope=${scope}`;
 export const redditTokenUri = 'https://www.reddit.com/api/v1/access_token';
+export const redditBaseApiUri = 'https://oauth.reddit.com';

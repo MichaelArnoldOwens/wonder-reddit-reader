@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import { basic_auth, redirect_uri, redditTokenUri, state } from '../config';
 
-export function getBearerCode() {
+export function getAuthCode() {
   let params = window.location.href.split('?');
 
   // Parse the query params
@@ -37,6 +37,7 @@ function getAccessToken(code) {
     if(error) {
       return { error };
     }
+    localStorage.setItem('access_token', access_token);
     return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)
@@ -45,7 +46,7 @@ function getAccessToken(code) {
 }
 
 // TODO: refactor getNewToken and getAccessToken
-export function getNewToken(refresh_token) {
+export function getNewAccessToken(refresh_token) {
   const get_refresh_token_uri = `${redditTokenUri}grant_type=refresh_token&refresh_token=${refresh_token}`
   fetch(get_refresh_token_uri, {
     method: 'POST',
@@ -59,6 +60,7 @@ export function getNewToken(refresh_token) {
     if(error) {
       return { error };
     }
+    localStorage.setItem('access_token', access_token);
     return { access_token, refresh_token };
   }).catch(err => {
     console.log(err)
