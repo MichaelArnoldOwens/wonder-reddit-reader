@@ -7,14 +7,13 @@ export default class Feed extends Component {
 
     return posts ?
       posts.map(post => {
-        const { id, title } = post.data;
+        const { id, title, url } = post.data;
         return (
-          <div key={ id }>
-            <h3>{ title }</h3>
+          <div key={id}>
+            <a href={url} target='_blank'><h4>{title}</h4></a>
           </div>
         );
-      }) 
+      })
       : null;
-
   }
 }

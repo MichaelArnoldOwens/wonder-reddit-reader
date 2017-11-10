@@ -10,32 +10,34 @@ export default class Feed extends Component {
       posts: false
     };
   }
+
+  getFeed = () => {
+    getMyHome().then(response => {
+      if (response.error) {
+        const refresh_token = localStorage.getItem('refresh_token');
+        if (refresh_token) {
+          return getNewAccessToken(refresh_token, getMyHome).then(response => {
+            this.getFeed();
+          });
+        }
+      }
+      this.setState({
+        posts: response.children
+      });
+      return response;
+    })
+  }
+
   render() {
     const { posts } = this.state;
-    if(!posts) {
-      console.log('no posts')
-      console.log(posts);
-    }
-    if(!posts) {
-      getMyHome().then(response => {
-        console.log('getMyHome')
-        console.log(response);
-        // TODO: verify whether this works or not
-        if(response.error) {
-          // refresh token
-          const refresh_token = localStorage.getItem('refresh_token');
-          return getNewAccessToken(refresh_token, getMyHome);
-        }
-        this.setState({
-          posts: response.children
-        });
-        return response;
-      });
+    const access_token = localStorage.getItem('access_token');
+    if (!posts && access_token) {
+      this.getFeed();
     }
 
     return (
       <div>
-        <Post posts={ posts } />
+        <Post posts={posts} />
       </div>
     );
   }

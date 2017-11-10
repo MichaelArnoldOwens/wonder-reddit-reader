@@ -16,7 +16,7 @@ class App extends Component {
 
   initAuthentication = () => {
     getAuthCode().then(response => {
-      if(response.error) {
+      if (response.error) {
         this.setState({
           error: response.error
         });
@@ -33,8 +33,10 @@ class App extends Component {
     const { access_token, error } = this.state;
     const isRedirect = window.location.href.split('?').length > 1;
     const localToken = localStorage.getItem('access_token');
-    const doesTokenExist = access_token || localToken
-    if(!doesTokenExist && isRedirect && !error) {
+    const refreshToken = localStorage.getItem('refresh_token');
+    const doesRefreshTokenExist = refreshToken !== 'undefined' && refreshToken
+    const doesTokenExist = (access_token || localToken) && doesRefreshTokenExist; // if we don't have an access token, reauthenticate
+    if (!doesTokenExist && isRedirect && !error) {
       this.initAuthentication();
     }
 
@@ -45,7 +47,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to Wonder Reddit Reader</h1>
         </header>
         <div className="App-intro">
-          { doesTokenExist ? <Feed /> : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
+          {doesTokenExist ? <Feed /> : (<a href={redditInitAuthUri} ><button>LOGIN</button></a>)}
         </div>
       </div>
     );
