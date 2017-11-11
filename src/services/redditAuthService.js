@@ -36,6 +36,7 @@ function getAccessToken(code) {
       if (error) {
         return { error };
       }
+
       localStorage.setItem('access_token', access_token);
       if (refresh_token) {
         localStorage.setItem('refresh_token', refresh_token);
