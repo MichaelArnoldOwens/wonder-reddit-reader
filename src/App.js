@@ -4,6 +4,7 @@ import './App.css';
 import { redditInitAuthUri } from './config';
 import { getAuthCode } from './services/redditAuthService';
 import Feed from './components/Feed';
+import SubList from './components/SubList';
 
 class App extends Component {
   constructor(props) {
@@ -32,10 +33,10 @@ class App extends Component {
   render() {
     const { access_token, error } = this.state;
     const isRedirect = window.location.href.split('?').length > 1;
-    const localToken = localStorage.getItem('access_token');
+    const localAccesToken = localStorage.getItem('access_token');
     const refreshToken = localStorage.getItem('refresh_token');
     const doesRefreshTokenExist = refreshToken !== 'undefined' && refreshToken
-    const doesTokenExist = (access_token || localToken) && doesRefreshTokenExist; // if we don't have an access token, reauthenticate
+    const doesTokenExist = (access_token || localAccesToken) && doesRefreshTokenExist; // if we don't have an access token, reauthenticate
     if (!doesTokenExist && isRedirect && !error) {
       this.initAuthentication();
     }

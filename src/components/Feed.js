@@ -14,9 +14,10 @@ export default class Feed extends Component {
   getFeed = () => {
     getMyHome().then(response => {
       if (response.error) {
+        // TODO refactor this refresh token logic to be a reusable method
         const refresh_token = localStorage.getItem('refresh_token');
         if (refresh_token) {
-          return getNewAccessToken(refresh_token, getMyHome).then(response => {
+          return getNewAccessToken(refresh_token).then(response => {
             this.getFeed();
           });
         }

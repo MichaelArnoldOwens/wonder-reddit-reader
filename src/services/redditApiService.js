@@ -3,8 +3,9 @@ import { redditBaseApiUri } from '../config';
 
 
 // TODO: add check that we have an access_token
+// TODO: handle nextOrPrev for getting next slice of listings
 
-export function getMyHome() {
+export function getMyHome(nextOrPrev = null) {
   const token = localStorage.getItem('access_token');
   return fetch(redditBaseApiUri, {
     method: 'GET',
@@ -24,7 +25,7 @@ export function getMyHome() {
   });
 }
 
-export function getMySubreddits() {
+export function getMySubreddits(nextOrPrev = null) {
   const token = localStorage.getItem('access_token');
   return fetch(redditBaseApiUri + '/subreddits/mine/subscriber', {
     method: 'GET',
@@ -33,10 +34,10 @@ export function getMySubreddits() {
     }
   }).then(response => {
     return response.json();
-  }).then(response => response.data.children);
+  });
 }
 
-export function getSubreddit(sub) {
+export function getSubreddit(sub, nextOrPrev = null) {
   const token = localStorage.getItem('access_token');
   return fetch(redditBaseApiUri + sub, {
     method: 'GET',
