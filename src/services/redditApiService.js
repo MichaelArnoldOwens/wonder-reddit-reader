@@ -7,7 +7,22 @@ import { redditBaseApiUri } from '../config';
 
 export function getMyHome(nextOrPrev = null) {
   const token = localStorage.getItem('access_token');
-  return fetch(redditBaseApiUri, {
+  let url = redditBaseApiUri;
+  /*
+    1. if there's nextOrPrev
+    2. is it next or prev?
+  */
+  if (nextOrPrev) {
+    const { next, prev } = nextOrPrev
+    if (next) {
+      url = `${redditBaseApiUri}/?after=t3_${next}`;
+    } else if (prev) {
+      url = `${redditBaseApiUri}/?before=t3_${prev}`;
+    }
+  }
+
+
+  return fetch(url, {
     method: 'GET',
     headers: {
       'Authorization': `bearer ${token}`
